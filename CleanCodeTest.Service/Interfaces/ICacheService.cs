@@ -1,9 +1,10 @@
-﻿namespace CleanCodeTest.Service.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace CleanCodeTest.Service.Interfaces
 {
    public interface ICacheService
    {
-      void SetUsingCache(string cacheKey, object body);
-      string GetUsingCache(string cacheKey);
-      void DeleteFromCache(string cacheKey);
+      Task SetUsingCache(string cacheKey, object body);
+      Task<string> GetUsingCache(string cacheKey);
    }
 }
