@@ -2,9 +2,10 @@
 {
    public class GeneralResponse
    {
-      public GeneralResponse(bool success)
+      public GeneralResponse(bool success, string message)
       {
          Success = success;
+         Message = message;
       }
 
       public GeneralResponse(string message, object data = null)

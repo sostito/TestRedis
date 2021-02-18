@@ -2,60 +2,57 @@
 using CleanCodeTest.Model;
 using CleanCodeTest.Model.Request;
 using CleanCodeTest.Model.Responses;
-using CleanCodeTest.Service;
 using CleanCodeTest.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanCodeTest.General.Controllers
 {
-   [Route("api/[controller]")]
+   [Route("api/[controller]/[action]")]
    [ApiController]
    public class BetController : ControllerBase
    {
-      readonly IRedisService redisService;
-      readonly CacheService cacheService;
-      public BetController(IRedisService redisService, CacheService cacheService)
+      readonly IRouletteService rouletteService;
+      public BetController(IRouletteService rouletteService)
       {
-         this.redisService = redisService;
-         this.cacheService = cacheService;
+         this.rouletteService = rouletteService;
       }
 
-      [HttpPost("[action]")]
+      [HttpPost]
       public IActionResult CreateRoulette()
       {
-         GeneralResponse response = redisService.CreateRoulette();
+         GeneralResponse response = rouletteService.CreateRoulette();
          return Ok(response);
       }
 
-      [HttpPost("[action]")]
-      public IActionResult RouletteOpening(RouletteOpeningRequest rouletteOpeningRequest)
+      [HttpPost]
+      public IActionResult OpeningRoulette(RouletteOpeningRequest rouletteOpeningRequest)
       {
-         GeneralResponse response = redisService.RouletteOpening(rouletteOpeningRequest);
+         GeneralResponse response = rouletteService.OpeningRoulette(rouletteOpeningRequest);
          return Ok(response);
       }
 
-      [HttpPost("[action]")]
+      [HttpPost]
       public IActionResult MakeBet(MakeBetRequest rouletteOpeningRequest)
       {
          if (!Request.Headers.ContainsKey("UserId"))
             return BadRequest(Constants.ERROR_HEADER_IDUSUARIO);
 
          rouletteOpeningRequest.UserId = Request.Headers["UserId"];
-         GeneralResponse response = redisService.MakeBet(rouletteOpeningRequest);
+         GeneralResponse response = rouletteService.MakeBet(rouletteOpeningRequest);
          return Ok(response);
       }
 
-      [HttpPost("[action]")]
+      [HttpPost]
       public IActionResult CloseBets(CloseBetsRequest closeBetsRequest)
       {
-         GeneralResponse response = redisService.CloseBets(closeBetsRequest);
+         GeneralResponse response = rouletteService.CloseBets(closeBetsRequest);
          return Ok(response);
       }
 
-      [HttpGet("[action]")]
+      [HttpGet]
       public IActionResult GetRouletteList()
       {
-         GeneralResponse response = redisService.GetRouletteList();
+         GeneralResponse response = rouletteService.GetRouletteList();
          return Ok(response);
       }
 

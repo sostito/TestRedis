@@ -4,10 +4,10 @@ using CleanCodeTest.Model.Responses;
 
 namespace CleanCodeTest.Service.Interfaces
 {
-   public interface IRedisService
+   public interface IRouletteService
    {
       GeneralResponse CreateRoulette();
-      GeneralResponse RouletteOpening(RouletteOpeningRequest request);
+      GeneralResponse OpeningRoulette(RouletteOpeningRequest request);
       GeneralResponse MakeBet(MakeBetRequest request);
       GeneralResponse CloseBets(CloseBetsRequest request);
       GeneralResponse GetRouletteList();

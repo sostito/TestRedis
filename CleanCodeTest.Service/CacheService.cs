@@ -1,12 +1,11 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿using CleanCodeTest.Service.Interfaces;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System;
-using System.Threading.Tasks;
 
 namespace CleanCodeTest.Service
 {
-   public class CacheService
+   public class CacheService : ICacheService
    {
       private readonly IDistributedCache _cache;
       private readonly IConfiguration _configuration;
@@ -29,12 +28,6 @@ namespace CleanCodeTest.Service
       {
          var elementJson = _cache.GetString(cacheKey);
          return elementJson;
-      }
-
-      public async Task DeleteFromCacheAsync(string cacheKey)
-      {
-         if (_redisEnabled)
-            await _cache.RemoveAsync(cacheKey);
       }
 
       public void DeleteFromCache(string cacheKey)
