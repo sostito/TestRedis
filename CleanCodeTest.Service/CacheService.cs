@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿using CleanCodeTest.Service.Interfaces;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System;
 using System.Threading.Tasks;
 
 namespace CleanCodeTest.Service
 {
-   public class CacheService
+   public class CacheService : ICacheService
    {
       private readonly IDistributedCache _cache;
       private readonly IConfiguration _configuration;
@@ -19,29 +19,19 @@ namespace CleanCodeTest.Service
          _redisEnabled = bool.Parse(_configuration.GetSection("RedisCache").GetSection("Enabled").Value);
       }
 
-      public void SetUsingCache(string cacheKey, object body)
+      public async Task SetUsingCache(string cacheKey, object body)
       {
          var elementJson = JsonConvert.SerializeObject(body);
-         _cache.SetString(cacheKey, elementJson);
+         if (_redisEnabled)
+            await _cache.SetStringAsync(cacheKey, elementJson);
       }
 
-      public string GetUsingCache(string cacheKey)
+      public async Task<string> GetUsingCache(string cacheKey)
       {
-         var elementJson = _cache.GetString(cacheKey);
+         string elementJson = string.Empty;
+         if (_redisEnabled)
+            elementJson = await _cache.GetStringAsync(cacheKey);
          return elementJson;
       }
-
-      public async Task DeleteFromCacheAsync(string cacheKey)
-      {
-         if (_redisEnabled)
-            await _cache.RemoveAsync(cacheKey);
-      }
-
-      public void DeleteFromCache(string cacheKey)
-      {
-         if (_redisEnabled)
-            _cache.RemoveAsync(cacheKey);
-      }
-
    }
 }
